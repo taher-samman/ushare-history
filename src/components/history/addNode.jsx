@@ -12,7 +12,7 @@ function AddNode(props) {
 
       <Modal show={props.show} onHide={props.onClose} centered>
         <Modal.Body>
-            <AddFrom closeModal={props.onClose} service={props.service} update={props.update} />
+            <AddFrom update={props.update} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onClose}>

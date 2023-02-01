@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "staging": "ushare-history",
+    "default": "ushare-history"
+  },
+  "targets": {},
+  "etags": {}
+}

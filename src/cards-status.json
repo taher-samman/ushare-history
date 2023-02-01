@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Used",
+        "type": 1
+    },
+    {
+        "label": "Available",
+        "type": 0
+    },
+    {
+        "label": "Removed",
+        "type": 10
+    }
+]

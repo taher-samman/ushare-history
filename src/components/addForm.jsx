@@ -52,7 +52,7 @@ function AddFrom(props) {
     return (
         <Form onSubmit={e => { addService(e) }}>
             <Form.Group className="mb-3">
-                <Form.Control type="text" placeholder="Number:" defaultValue={number} onChange={(e) => { setNumber(e.target.value) }} />
+                <Form.Control type="number" placeholder="Number:" defaultValue={number} onChange={(e) => { setNumber(e.target.value) }} />
             </Form.Group>
             <Form.Group className="mb-3">
                 <DatePicker className='form-control' placeholderText="Date:" selected={date} dateFormat='dd/MM/yyyy' onChange={(date) => setDate(date)} />

@@ -1,14 +1,14 @@
+import Grid from '../components/cards/grid';
 import Header from '../components/header';
-import Nodes from '../components/nodes';
-function Home() {
+function Cards() {
     return (
         <>
             <Header />
-            <Nodes />
+            <Grid />
         </>
     );
 }
 
-export default Home;
+export default Cards;
 
 

@@ -24,3 +24,6 @@ body{
   display: flex;
   flex-direction: column;
 }
+.nav-link.active{
+  font-weight: bold;
+}
