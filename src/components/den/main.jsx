@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { ImPlus } from 'react-icons/im';
-import { db, getDocuments } from "../../firebase";
+import { db, formatPrice, getDocuments } from "../../firebase";
 import { useDispatch } from 'react-redux';
 import { show, hide } from '../../reducers/loaderState';
 import { toast } from 'react-toastify';
@@ -15,7 +15,9 @@ function Main() {
     const dispatch = useDispatch();
     const [newUser, setNewUser] = useState('');
     const [users, setUsers] = useState([]);
+    const [totalDen, setTotalDen] = useState(0);
     const [debits, setDebits] = useState([]);
+    const [paids, setPaids] = useState([]);
     const [refreshData, setRefreshData] = useState(0);
     const addUser = (e) => {
         e.preventDefault();
@@ -49,7 +51,7 @@ function Main() {
                         index['name'] = element.data().name;
                         index['total'] = element.data().total;
                         index['totalPaid'] = element.data().totalPaid;
-                        index['userRef'] = doc(db,'users',element.id);
+                        index['userRef'] = doc(db, 'users', element.id);
                         apiUsers.push(index);
                     });
                     setUsers(apiUsers);
@@ -72,12 +74,35 @@ function Main() {
                         })
                         .catch((e) => toast.error(`Error fetch debits: ${e}`))
                         .finally(() => {
-                            dispatch(hide());
+                            var paidsUsers = [];
+                            getDocuments('paids')
+                                .then((d) => {
+                                    d.docs.forEach(element => {
+                                        var index = [];
+                                        index['id'] = element.id;
+                                        index['createdAt'] = element.data().createdAt;
+                                        index['paid'] = element.data().paid;
+                                        index['user'] = element.data().user;
+                                        paidsUsers.push(index);
+                                    });
+                                    setPaids(paidsUsers);
+                                })
+                                .catch((e) => toast.error(`Error fetch paids: ${e}`))
+                                .finally(() => {
+                                    dispatch(hide());
+                                });
                         });
                 });
         }
         fetchData();
     }, [dispatch, refreshData]);
+    useEffect(() => {
+        var denKlo = 0;
+        users.forEach(element => {
+            denKlo += element.total;
+        });
+        setTotalDen(denKlo);
+    }, [totalDen, users]);
     return (
         <>
             <Container className="pt-4">
@@ -89,7 +114,10 @@ function Main() {
                         </Button>
                     </Form.Group>
                 </Form>
-                {users.length && <Users users={users} update={update} debits={debits} />}
+                <div className="alert alert-secondary" role="alert">
+                    Total: <div className="fw-bold d-inline">{formatPrice(totalDen)}</div>
+                </div>
+                {users.length > 0 && <Users users={users} update={update} debits={debits} paids={paids} />}
             </Container>
         </>
     );

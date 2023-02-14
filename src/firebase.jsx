@@ -60,7 +60,7 @@ export const clearAll = (update) => {
             const docRef = doc(db, "services", element.id);
             await deleteDoc(docRef)
                 .then(() => toast.success(`${element.data().number} deleted!`, { autoClose: 200 }))
-                .catch((e) => toast.error(`Error delete document: ${e}`));;
+                .catch((e) => toast.error(`Error delete document: ${e}`));
         });
     }).finally(() => update());
 }
@@ -73,10 +73,11 @@ export const encryptData = (code) => {
     return data;
 };
 export const formatPrice = (price, currentcy = 'LBP') => {
+    return `${currentcy} ${price}`;
     let pounds = Intl.NumberFormat('en-LB', {
         style: 'currency',
         currency: currentcy,
-        maximumSignificantDigits: 3,
+        // maximumSignificantDigits: 3,
     });
 
     return pounds.format(price);
@@ -111,7 +112,7 @@ export const clearAllCards = (update) => {
         });
     }).finally(() => update());
 }
-export const deleteDocumentWithBackup = (collectionName, document, update) => {
+export const deleteDocumentWithBackup = (collectionName, document, update = () => console.log('update function')) => {
     var documentObject = { ...document };
     delete documentObject.id;
     const docRef = doc(db, collectionName, document.id);
@@ -134,7 +135,7 @@ export const getCardTypeLabel = (type) => {
     return 'Unknown';
 }
 export const calculateUserTotal = (userRef, update = () => console.log('update function')) => {
-    var total = 0;
+    var totalDebit = 0;
     getDocs(
         query(
             collection(db, 'debits'),
@@ -142,12 +143,27 @@ export const calculateUserTotal = (userRef, update = () => console.log('update f
         )
     ).then(d => {
         d.docs.forEach(element => {
-            total += parseInt(element.data().debit);
+            totalDebit += parseInt(element.data().debit);
         });
-        updateDoc(userRef, { total: total })
-            .then(() => toast.success(`Total Calculated!`))
-            .finally(update)
-            .catch((e) => toast.error(`Error update total document: ${e}`));
+        var totalPaid = 0;
+        getDocs(
+            query(
+                collection(db, 'paids'),
+                where('user', '==', userRef)
+            )
+        ).then(d => {
+            d.docs.forEach(paid => {
+                totalPaid += parseInt(paid.data().paid);
+            });
+            // if (totalDebit >= totalPaid) {
+            // } else {
+            //     toast.error(`Ekhd mno zyede`)
+            // }
+            updateDoc(userRef, { total: totalDebit - totalPaid })
+                    .then(() => toast.success(`Total Calculated!`))
+                    .finally(update)
+                    .catch((e) => toast.error(`Error update total document: ${e}`));
+        }).catch((e) => toast.error(`Error find debits document: ${e}`));
     }).catch((e) => toast.error(`Error find debits document: ${e}`));
 }
 export default app;

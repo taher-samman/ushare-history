@@ -11,7 +11,7 @@ import AddNode from './addNode';
 import { useDispatch } from 'react-redux';
 import { show as showLoader, hide } from '../../reducers/loaderState';
 import { clearAllCards, db, encryptData, getCardTypeLabel, getAvailableStatus } from '../../firebase';
-import { collection, addDoc, query, orderBy, getDocs } from "firebase/firestore";
+import { collection, addDoc, query, orderBy, getDocs, where } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import { toast } from 'react-toastify';
 import DatePicker from "react-datepicker";
@@ -28,18 +28,16 @@ function Grid() {
         const fetchCards = () => {
             dispatch(showLoader());
             var apiCards = [];
-            getDocs(query(collection(db, 'cards'), orderBy('date', 'asc'))).then((d) => {
+            getDocs(query(collection(db, 'cards'), where('status', '==', getAvailableStatus().type), orderBy('date', 'asc'))).then((d) => {
                 d.docs.forEach(element => {
-                    if (element.data().status === getAvailableStatus().type) {
-                        var elementArray = [];
-                        elementArray['id'] = element.id;
-                        elementArray['code'] = element.data().code;
-                        elementArray['type'] = element.data().type;
-                        elementArray['date'] = element.data().date;
-                        elementArray['status'] = element.data().status;
-                        elementArray['takedAt'] = element.data().takedAt;
-                        apiCards.push(elementArray);
-                    }
+                    var elementArray = [];
+                    elementArray['id'] = element.id;
+                    elementArray['code'] = element.data().code;
+                    elementArray['type'] = element.data().type;
+                    elementArray['date'] = element.data().date;
+                    elementArray['status'] = element.data().status;
+                    elementArray['takedAt'] = element.data().takedAt;
+                    apiCards.push(elementArray);
                 });
                 setCards(apiCards);
                 handleClose();

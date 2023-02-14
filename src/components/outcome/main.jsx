@@ -9,7 +9,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useState } from "react";
 import { ImPlus } from 'react-icons/im';
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from '../../firebase';
 // import Scores from "./scores";
 import OutComes from "./outComes";
@@ -47,7 +47,7 @@ function Main() {
         const fetchOutcomes = async () => {
             dispatch(show());
             var apiOutcomes = [];
-            await getDocuments('outcome')
+            await getDocs(query(collection(db, 'outcome'), orderBy('date','desc')))
                 .then((d) => {
                     d.docs.forEach(element => {
                         var index = [];
@@ -89,7 +89,7 @@ function Main() {
     }, [modalOutCome]);
     const addOutCome = (e) => {
         e.preventDefault();
-        if (parseInt(todayOutCome) < 1000) {
+        if (parseInt(todayOutCome) < 1) {
             toast.error(`Wrong Format`);
         } else {
             if (window.confirm('Sure?')) {

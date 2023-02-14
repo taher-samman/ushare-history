@@ -6,7 +6,14 @@ function Users(props) {
     return (
         <>
             <div className="accordion" id="accordionUsers">
-                {users.map(user => <User key={user.id} user={user} debits={props.debits.filter(debit => refEqual(debit.user,user.userRef))} update={props.update} />)}
+                {users.map(user => <User
+                    key={user.id}
+                    user={user}
+                    debits={props.debits.filter(debit => refEqual(debit.user, user.userRef))}
+                    paids={props.paids.filter(paid => refEqual(paid.user, user.userRef))}
+                    update={props.update}
+                />)
+                }
             </div>
         </>);
 }

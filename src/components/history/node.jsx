@@ -16,7 +16,6 @@ function Node(props) {
     const [bg, setBg] = useState('bg-warning');
     const toDate = timesTamp => {
         var date = new Date(parseInt(timesTamp));
-        console.log('date',date);
         return `${date.getDate()}/${("0" + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}-${date.getHours()}:${date.getMinutes()}`;
     };
     const deleteCard = async () => {

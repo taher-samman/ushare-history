@@ -5,7 +5,7 @@ function Debits(props) {
     return (
         <>
             <ol className="list-group mb-3">
-                {debits.map(debit => <Debit key={debit.id} debit={debit} />)}
+                {debits.map(debit => <Debit key={debit.id} debit={debit} update={props.update} />)}
             </ol>
         </>);
 }
