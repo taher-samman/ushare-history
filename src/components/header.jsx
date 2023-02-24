@@ -47,6 +47,9 @@ function Header() {
           <Nav>
             <NavLink to='/outcome' className="nav-link text-center">Out Come</NavLink>
           </Nav>
+          <Nav>
+            <NavLink to='/prices' className="nav-link text-center">Prices</NavLink>
+          </Nav>
           <Nav className="ms-auto p-2">
             <Button variant="danger" onClick={logOut}>LogOut</Button>
           </Nav>

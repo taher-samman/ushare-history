@@ -1,0 +1,26 @@
+[debug] [2023-02-24T13:56:15.595Z] ----------------------------------------------------------------------
+[debug] [2023-02-24T13:56:15.597Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Taher Samman\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-02-24T13:56:15.598Z] CLI Version:   11.21.0
+[debug] [2023-02-24T13:56:15.599Z] Platform:      win32
+[debug] [2023-02-24T13:56:15.599Z] Node Version:  v18.12.1
+[debug] [2023-02-24T13:56:15.600Z] Time:          Fri Feb 24 2023 15:56:15 GMT+0200 (Eastern European Standard Time)
+[debug] [2023-02-24T13:56:15.600Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-02-24T13:56:15.607Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2023-02-24T13:56:15.778Z] > refreshing access token with scopes: []
+[debug] [2023-02-24T13:56:15.779Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-02-24T13:56:15.780Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-02-24T13:56:16.086Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-02-24T13:56:16.087Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-02-24T13:56:16.099Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/undefined [none]
+[debug] [2023-02-24T13:56:16.271Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2023-02-24T13:56:16.272Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2023-02-24T13:56:16.586Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/undefined 403
+[debug] [2023-02-24T13:56:16.586Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/undefined {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2023-02-24T13:56:16.589Z] HTTP Error: 403, The caller does not have permission
+[debug] [2023-02-24T13:56:16.885Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\Taher Samman\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:49:12)
+    at RetryOperation._fn (C:\Users\Taher Samman\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:288:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project undefined. Please make sure the project exists and your account has permission to access it.

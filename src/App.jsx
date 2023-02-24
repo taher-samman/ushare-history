@@ -10,6 +10,7 @@ import History from './templates/history';
 import Ushare from './templates/ushare';
 import OutCome from './templates/outcome';
 import Den from './templates/den';
+import Prices from './templates/prices';
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
             <Route path='/history' element={<History />} />
             <Route path='/outcome' element={<OutCome />} />
             <Route path='/den' element={<Den />} />
+            <Route path='/prices' element={<Prices />} />
           </Route>
           <Route path='/login' element={<PrivateLoginRoute />}>
             <Route index element={<Login />} />
