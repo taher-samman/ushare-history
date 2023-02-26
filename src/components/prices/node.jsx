@@ -21,10 +21,10 @@ function Node(props) {
     }
     return (
         <tr>
-            <td className='align-middle'>{gb.gb}</td>
-            <td className='align-middle'>{`${gb.price}$`}</td>
-            <td className='align-middle'>{parseInt(gb.price) * parseInt(props.sayrafa)}</td>
-            <td className='align-middle text-center'>
+            <td className='align-middle fw-bold' style={{ color: 'red' }}>{gb.gb}</td>
+            <td className='align-middle fw-bold' style={{ color: 'red' }}>{`${gb.price}$`}</td>
+            <td className='align-middle fw-bold' style={{ color: 'red' }}>{formatPrice(parseFloat(gb.price) * parseFloat(props.sayrafa))}</td>
+            <td className='align-middle text-center opacity-25'>
                 <Button variant="" onClick={() => props.onOpen(gb)}>
                     <TbEdit />
                 </Button>

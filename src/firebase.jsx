@@ -73,14 +73,17 @@ export const encryptData = (code) => {
     return data;
 };
 export const formatPrice = (price, currentcy = 'LBP') => {
-    return `${currentcy} ${price}`;
-    let pounds = Intl.NumberFormat('en-LB', {
-        style: 'currency',
-        currency: currentcy,
-        // maximumSignificantDigits: 3,
-    });
-
-    return pounds.format(price);
+    price = Object.assign([], price.toString());
+    var formatedPrice = [];
+    var cpt = 0;
+    for (let i = (price.length - 1); i >= 0; i--) {
+        if (cpt % 3 === 0 && cpt !== 0) {
+            formatedPrice.unshift(',');
+        }
+        formatedPrice.unshift(price[i]);
+        cpt++;
+    }
+    return `${currentcy} ${formatedPrice.join('')}`;
 }
 export const decryptData = (code) => {
     const bytes = CryptoJS.AES.decrypt(code, hashEncrypt);
@@ -160,9 +163,9 @@ export const calculateUserTotal = (userRef, update = () => console.log('update f
             //     toast.error(`Ekhd mno zyede`)
             // }
             updateDoc(userRef, { total: totalDebit - totalPaid })
-                    .then(() => toast.success(`Total Calculated!`))
-                    .finally(update)
-                    .catch((e) => toast.error(`Error update total document: ${e}`));
+                .then(() => toast.success(`Total Calculated!`))
+                .finally(update)
+                .catch((e) => toast.error(`Error update total document: ${e}`));
         }).catch((e) => toast.error(`Error find debits document: ${e}`));
     }).catch((e) => toast.error(`Error find debits document: ${e}`));
 }

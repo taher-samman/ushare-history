@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -59,7 +59,12 @@ function Main() {
                 .catch((e) => toast.error(`Error fetch data: ${e}`))
                 .finally(() => {
                     var apiGbs = [];
-                    getDocuments('gb').then((d) => {
+                    getDocs(
+                        query(
+                            collection(db, 'gb'),
+                            orderBy('order', 'asc')
+                        )
+                    ).then((d) => {
                         d.docs.forEach(element => {
                             var elementArray = [];
                             elementArray['id'] = element.id;
@@ -129,7 +134,7 @@ function Main() {
     } else {
         return (
             <Container>
-                <div className="mt-3 alert alert-secondary" role="alert">
+                <div className="mt-3 alert alert-secondary opacity-25" role="alert">
                     <Form onSubmit={e => changeSayrafa(e)}>
                         <Form.Group className="d-flex">
                             <Form.Control type="number" placeholder='Sayrafa:' style={{ borderRadius: '0.375rem 0 0 0.375rem' }} required={true} value={sayrafa} onChange={(e) => { setSayrafa(e.target.value) }} />
@@ -139,12 +144,12 @@ function Main() {
                         </Form.Group>
                     </Form>
                 </div>
-                <div className="d-flex justify-content-end">
+                <div className="d-flex justify-content-end opacity-25">
                     <AddNode update={update} show={show} onClose={handleClose} onOpen={handleShow} gbModal={gbModal} />
                 </div>
-                 {gbs.length ?
+                {gbs.length ?
                     <Table striped bordered hover>
-                        <thead>
+                        <thead className='opacity-25'>
                             <tr>
                                 <th>Gb</th>
                                 <th>Price</th>

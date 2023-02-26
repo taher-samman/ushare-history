@@ -17,7 +17,7 @@ function AddFrom(props) {
             try {
                 if (props.gb.gb === undefined || props.gb.id === undefined) {
                     await addDoc(collection(db, "gb"), {
-                        gb: gb, price: parseInt(price)
+                        gb: gb, price: parseFloat(price), order: 0
                     })
                         .then(() => {
                             toast.success(`${gb} added!`);
@@ -47,7 +47,7 @@ function AddFrom(props) {
                 <Form.Control type="text" placeholder="Gb:" defaultValue={gb} onChange={(e) => { setGb(e.target.value) }} />
             </Form.Group>
             <Form.Group className="mb-3">
-                <Form.Control type="number" placeholder="Price:" defaultValue={price} onChange={(e) => { setPrice(e.target.value) }} />
+                <Form.Control type="number" placeholder="Price:" step="0.1" defaultValue={price} onChange={(e) => { setPrice(e.target.value) }} />
             </Form.Group>
             <Button variant="success" type="submit">
                 {props.gb.gb === undefined ? 'Add' : 'Edit'}
