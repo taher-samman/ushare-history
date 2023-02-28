@@ -12,7 +12,7 @@ import AddNode from './addNode';
 // import Button from 'react-bootstrap/Button';
 import Node from './node';
 import { useDispatch } from 'react-redux';
-import { db, getDocuments } from '../../firebase';
+import { db } from '../../firebase';
 import { show as showLoader, hide } from '../../reducers/loaderState';
 function Main() {
     const dispatch = useDispatch();

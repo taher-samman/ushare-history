@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { deleteDocumentWithBackup, getDocuments } from "../../firebase";
+import { deleteDocumentWithBackup } from "../../firebase";
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { show, hide } from '../../reducers/loaderState';
@@ -47,7 +47,7 @@ function Main() {
         const fetchOutcomes = async () => {
             dispatch(show());
             var apiOutcomes = [];
-            await getDocs(query(collection(db, 'outcome'), orderBy('date','desc')))
+            await getDocs(query(collection(db, 'outcome'), orderBy('date', 'desc')))
                 .then((d) => {
                     d.docs.forEach(element => {
                         var index = [];
@@ -137,7 +137,7 @@ function Main() {
                         </Button>
                     </Form.Group>
                 </Form>
-                {outComes.length > 0 && <OutComes openModal={handleShow} outcomes={outComes.filter(out => out.score === null)} />}
+                {outComes.length > 0 && <OutComes openModal={handleShow} update={() => { setUpdateData(updateData + 1) }} outcomes={outComes.filter(out => out.score === null)} />}
                 {/* {scores.length > 0 && <Scores scores={scores} outcomes={outComes} />} */}
             </Container>
             <Modal show={showModal} onHide={handleClose} centered>
