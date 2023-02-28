@@ -15,6 +15,8 @@ function Main() {
     const dispatch = useDispatch();
     const [newUser, setNewUser] = useState('');
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [search, setSearch] = useState('');
     const [totalDen, setTotalDen] = useState(0);
     const [debits, setDebits] = useState([]);
     const [paids, setPaids] = useState([]);
@@ -103,6 +105,18 @@ function Main() {
         });
         setTotalDen(denKlo);
     }, [totalDen, users]);
+    
+    useEffect(() => {
+        console.log('run search');
+        if (search !== '') {
+            var searchedUsers = [];
+            searchedUsers = users.filter( u => {
+                var name = u.name.toLowerCase();
+                return name.includes(search);
+            } );
+            setFilteredUsers(searchedUsers);
+        }
+    }, [search, users]);
     return (
         <>
             <Container className="pt-4">
@@ -114,10 +128,15 @@ function Main() {
                         </Button>
                     </Form.Group>
                 </Form>
+                <Form>
+                    <Form.Group className="mb-3 d-flex">
+                        <Form.Control type="text" placeholder="Search:" value={search} onChange={(e) => { setSearch(e.target.value) }} />
+                    </Form.Group>
+                </Form>
                 <div className="alert alert-secondary" role="alert">
                     Total: <div className="fw-bold d-inline">{formatPrice(totalDen)}</div>
                 </div>
-                {users.length > 0 && <Users users={users} update={update} debits={debits} paids={paids} />}
+                {users.length > 0 && <Users users={search === '' ? users : filteredUsers} update={update} debits={debits} paids={paids} />}
             </Container>
         </>
     );
