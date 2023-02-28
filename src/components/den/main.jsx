@@ -112,7 +112,7 @@ function Main() {
             var searchedUsers = [];
             searchedUsers = users.filter( u => {
                 var name = u.name.toLowerCase();
-                return name.includes(search);
+                return name.includes(search.toLowerCase());
             } );
             setFilteredUsers(searchedUsers);
         }
