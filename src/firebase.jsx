@@ -73,17 +73,22 @@ export const encryptData = (code) => {
     return data;
 };
 export const formatPrice = (price, currentcy = 'LBP') => {
-    price = Object.assign([], price.toString());
-    var formatedPrice = [];
-    var cpt = 0;
-    for (let i = (price.length - 1); i >= 0; i--) {
-        if (cpt % 3 === 0 && cpt !== 0) {
-            formatedPrice.unshift(',');
+    if(currentcy === 'LBP'){
+        price = Object.assign([], price.toString());
+        var formatedPrice = [];
+        var cpt = 0;
+        for (let i = (price.length - 1); i >= 0; i--) {
+            if (cpt % 3 === 0 && cpt !== 0) {
+                formatedPrice.unshift(',');
+            }
+            formatedPrice.unshift(price[i]);
+            cpt++;
         }
-        formatedPrice.unshift(price[i]);
-        cpt++;
+        return `${currentcy} ${formatedPrice.join('')}`;
+    }else{
+        return `${price} ${currentcy}`;
     }
-    return `${currentcy} ${formatedPrice.join('')}`;
+    
 }
 export const decryptData = (code) => {
     const bytes = CryptoJS.AES.decrypt(code, hashEncrypt);
@@ -146,7 +151,7 @@ export const calculateUserTotal = (userRef, update = () => console.log('update f
         )
     ).then(d => {
         d.docs.forEach(element => {
-            totalDebit += parseInt(element.data().debit);
+            totalDebit += parseFloat(element.data().debit);
         });
         var totalPaid = 0;
         getDocs(
@@ -156,7 +161,7 @@ export const calculateUserTotal = (userRef, update = () => console.log('update f
             )
         ).then(d => {
             d.docs.forEach(paid => {
-                totalPaid += parseInt(paid.data().paid);
+                totalPaid += parseFloat(paid.data().paid);
             });
             // if (totalDebit >= totalPaid) {
             // } else {

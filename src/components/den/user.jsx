@@ -29,7 +29,7 @@ function User(props) {
                 const userRef = doc(db, 'users', user.id);
                 addDoc(collection(db, "debits"), {
                     user: userRef,
-                    debit: parseInt(debit),
+                    debit: parseFloat(debit),
                     createdAt: toTimestamp(new Date()),
                     comment: debitComment
                 })
@@ -54,7 +54,7 @@ function User(props) {
                 const userRef = doc(db, 'users', user.id);
                 addDoc(collection(db, "paids"), {
                     user: userRef,
-                    paid: parseInt(paid),
+                    paid: parseFloat(paid),
                     createdAt: toTimestamp(new Date()),
                 })
                     .then(() => {
@@ -190,7 +190,7 @@ function User(props) {
                         <div className="fw-bold w-100 d-flex align-items-baseline">
                             {user.name}
                             <span className={`badge ${user.total <= 0 ? 'bg-success' : 'bg-danger'} fs-6 ms-auto mx-2`}>
-                                {formatPrice(user.total)}
+                                {formatPrice(user.total, '$')}
                             </span>
                         </div>
                     </button>

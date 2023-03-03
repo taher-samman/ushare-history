@@ -105,15 +105,15 @@ function Main() {
         });
         setTotalDen(denKlo);
     }, [totalDen, users]);
-    
+
     useEffect(() => {
         console.log('run search');
         if (search !== '') {
             var searchedUsers = [];
-            searchedUsers = users.filter( u => {
+            searchedUsers = users.filter(u => {
                 var name = u.name.toLowerCase();
                 return name.includes(search.toLowerCase());
-            } );
+            });
             setFilteredUsers(searchedUsers);
         }
     }, [search, users]);
@@ -134,7 +134,7 @@ function Main() {
                     </Form.Group>
                 </Form>
                 <div className="alert alert-secondary" role="alert">
-                    Total: <div className="fw-bold d-inline">{formatPrice(totalDen)}</div>
+                    Total: <div className="fw-bold d-inline">{formatPrice(totalDen, '$')}</div>
                 </div>
                 {users.length > 0 && <Users users={search === '' ? users : filteredUsers} update={update} debits={debits} paids={paids} />}
             </Container>

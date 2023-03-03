@@ -28,7 +28,7 @@ function Debit(props) {
                     {debit.comment}
                 </div>
                 <span className="badge bg-danger fs-6 rounded-pill">
-                    {formatPrice(debit.debit)}
+                    {formatPrice(debit.debit, '$')}
                 </span>
             </li>
         </>);
