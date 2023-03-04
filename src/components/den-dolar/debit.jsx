@@ -13,7 +13,7 @@ function Debit(props) {
     const deleteMe = () => {
         if (window.confirm('sure?')) {
             dispatch(show());
-            const ref = doc(db, 'debits', debit.id);
+            const ref = doc(db, 'debits-$', debit.id);
             deleteDoc(ref)
                 .then(() => toast.success(`${formatPrice(debit.debit)} deleted!`, { autoClose: 200 }))
                 .catch((e) => toast.error(`Error delete document: ${e}`))

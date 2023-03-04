@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useState } from "react";
 import { ImPlus } from 'react-icons/im';
+import { AiOutlineReload } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { show } from '../../reducers/loaderState';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, refEqual, where } from "firebase/firestore";
@@ -26,8 +27,8 @@ function User(props) {
         } else {
             if (window.confirm('Sure?')) {
                 dispatch(show());
-                const userRef = doc(db, 'users', user.id);
-                addDoc(collection(db, "debits"), {
+                const userRef = doc(db, 'users-$', user.id);
+                addDoc(collection(db, "debits-$"), {
                     user: userRef,
                     debit: parseFloat(debit),
                     createdAt: toTimestamp(new Date()),
@@ -51,8 +52,8 @@ function User(props) {
         } else {
             if (window.confirm('Sure?')) {
                 dispatch(show());
-                const userRef = doc(db, 'users', user.id);
-                addDoc(collection(db, "paids"), {
+                const userRef = doc(db, 'users-$', user.id);
+                addDoc(collection(db, "paids-$"), {
                     user: userRef,
                     paid: parseFloat(paid),
                     createdAt: toTimestamp(new Date()),
@@ -73,7 +74,7 @@ function User(props) {
             for (let index = 0; index < debits.length; index++) {
                 const debit = debits[index]
                 if (refEqual(debit.user, user.userRef)) {
-                    const docRef = doc(db, 'debits', debit.id);
+                    const docRef = doc(db, 'debits-$', debit.id);
                     await new Promise(resolve => deleteDoc(docRef)
                         .then(() => {
                             toast.success(`Document deleted!`, { autoClose: 200 })
@@ -86,7 +87,7 @@ function User(props) {
             for (let index = 0; index < paids.length; index++) {
                 const paid = paids[index]
                 if (refEqual(paid.user, user.userRef)) {
-                    const docRef = doc(db, 'paids', paid.id);
+                    const docRef = doc(db, 'paids-$', paid.id);
                     await new Promise(resolve => deleteDoc(docRef)
                         .then(() => {
                             toast.success(`Document deleted!`)
@@ -96,13 +97,13 @@ function User(props) {
                     )
                 }
             }
-            getDocs(query(collection(db, 'debits'), where('user', '==', user.userRef)))
+            getDocs(query(collection(db, 'debits-$'), where('user', '==', user.userRef)))
                 .then((d) => {
                     if (d.docs.length === 0) {
-                        getDocs(query(collection(db, 'paids'), where('user', '==', user.userRef)))
+                        getDocs(query(collection(db, 'paids-$'), where('user', '==', user.userRef)))
                             .then((d) => {
                                 if (d.docs.length === 0) {
-                                    deleteDocumentWithBackup('users', user, props.update);
+                                    deleteDocumentWithBackup('users-$', user, props.update);
                                 } else {
                                     toast.error(`Error delete user , have paids`)
                                 }
@@ -116,14 +117,14 @@ function User(props) {
     const clearCache = async () => {
         if (window.confirm('Sure?')) {
             dispatch(show());
-            getDocs(query(collection(db, 'debits'), where('user', '==', user.userRef)))
+            getDocs(query(collection(db, 'debits-$'), where('user', '==', user.userRef)))
                 .then(async (d) => {
                     // console.log('get debits',d.docs);
                     for (let index = 0; index < d.docs.length; index++) {
                         const debit = d.docs[index]
                         if (refEqual(debit.data().user, user.userRef)) {
                             // console.log('delete debit',debit);
-                            const docRef = doc(db, 'debits', debit.id);
+                            const docRef = doc(db, 'debits-$', debit.id);
                             await new Promise(resolve => deleteDoc(docRef)
                                 .finally(resolve)
                                 .catch((e) => {
@@ -133,14 +134,14 @@ function User(props) {
                             )
                         }
                     }
-                    getDocs(query(collection(db, 'paids'), where('user', '==', user.userRef)))
+                    getDocs(query(collection(db, 'paids-$'), where('user', '==', user.userRef)))
                         .then(async (d) => {
                             // console.log('get paids',d.docs);
                             for (let index = 0; index < d.docs.length; index++) {
                                 const paid = d.docs[index]
                                 if (refEqual(paid.data().user, user.userRef)) {
                                     // console.log('delete paid',paid);
-                                    const docRef = doc(db, 'paids', paid.id);
+                                    const docRef = doc(db, 'paids-$', paid.id);
                                     await new Promise(resolve => deleteDoc(docRef)
                                         .finally(resolve)
                                         .catch((e) => {
@@ -150,10 +151,10 @@ function User(props) {
                                     )
                                 }
                             }
-                            getDocs(query(collection(db, 'debits'), where('user', '==', user.userRef)))
+                            getDocs(query(collection(db, 'debits-$'), where('user', '==', user.userRef)))
                                 .then((d) => {
                                     if (d.docs.length === 0) {
-                                        getDocs(query(collection(db, 'paids'), where('user', '==', user.userRef)))
+                                        getDocs(query(collection(db, 'paids-$'), where('user', '==', user.userRef)))
                                             .then((d) => {
                                                 if (d.docs.length === 0) {
                                                     calculateUserTotal(user.userRef, props.update);
@@ -185,7 +186,15 @@ function User(props) {
     return (
         <>
             <div className="accordion-item">
-                <h2 className="accordion-header" id={`heading-${user.id}`}>
+                <h2 className="accordion-header d-flex" id={`heading-${user.id}`}>
+                    <Button variant="danger" className="mx-3 mt-auto mb-auto" onClick={() => {
+                        if (window.confirm('sure?')) {
+                            dispatch(show());
+                            calculateUserTotal(user.userRef, props.update);
+                        }
+                    }}>
+                        <AiOutlineReload />
+                    </Button>
                     <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#user-${user.id}`} aria-expanded="false" aria-controls={`user-${user.id}`}>
                         <div className="fw-bold w-100 d-flex align-items-baseline">
                             {user.name}

@@ -73,7 +73,7 @@ export const encryptData = (code) => {
     return data;
 };
 export const formatPrice = (price, currentcy = 'LBP') => {
-    if(currentcy === 'LBP'){
+    if (currentcy === 'LBP') {
         price = Object.assign([], price.toString());
         var formatedPrice = [];
         var cpt = 0;
@@ -85,10 +85,10 @@ export const formatPrice = (price, currentcy = 'LBP') => {
             cpt++;
         }
         return `${currentcy} ${formatedPrice.join('')}`;
-    }else{
+    } else {
         return `${price} ${currentcy}`;
     }
-    
+
 }
 export const decryptData = (code) => {
     const bytes = CryptoJS.AES.decrypt(code, hashEncrypt);
@@ -146,7 +146,7 @@ export const calculateUserTotal = (userRef, update = () => console.log('update f
     var totalDebit = 0;
     getDocs(
         query(
-            collection(db, 'debits'),
+            collection(db, 'debits-$'),
             where('user', '==', userRef)
         )
     ).then(d => {
@@ -156,7 +156,39 @@ export const calculateUserTotal = (userRef, update = () => console.log('update f
         var totalPaid = 0;
         getDocs(
             query(
-                collection(db, 'paids'),
+                collection(db, 'paids-$'),
+                where('user', '==', userRef)
+            )
+        ).then(d => {
+            d.docs.forEach(paid => {
+                totalPaid += parseFloat(paid.data().paid);
+            });
+            // if (totalDebit >= totalPaid) {
+            // } else {
+            //     toast.error(`Ekhd mno zyede`)
+            // }
+            updateDoc(userRef, { total: totalDebit - totalPaid })
+                .then(() => toast.success(`Total Calculated!`))
+                .finally(update)
+                .catch((e) => toast.error(`Error update total document: ${e}`));
+        }).catch((e) => toast.error(`Error find debits document: ${e}`));
+    }).catch((e) => toast.error(`Error find debits document: ${e}`));
+}
+export const calculateUserTotalLb = (userRef, update = () => console.log('update function')) => {
+    var totalDebit = 0;
+    getDocs(
+        query(
+            collection(db, 'debits-lb'),
+            where('user', '==', userRef)
+        )
+    ).then(d => {
+        d.docs.forEach(element => {
+            totalDebit += parseFloat(element.data().debit);
+        });
+        var totalPaid = 0;
+        getDocs(
+            query(
+                collection(db, 'paids-lb'),
                 where('user', '==', userRef)
             )
         ).then(d => {

@@ -11,7 +11,7 @@ import { show, hide } from '../../reducers/loaderState';
 import { toast } from 'react-toastify';
 import { addDoc, collection, doc } from "firebase/firestore";
 import Users from "./users";
-function Main() {
+function MainDol() {
     const dispatch = useDispatch();
     const [newUser, setNewUser] = useState('');
     const [users, setUsers] = useState([]);
@@ -25,7 +25,7 @@ function Main() {
         e.preventDefault();
         if (window.confirm('Sure?')) {
             dispatch(show());
-            addDoc(collection(db, "users"), {
+            addDoc(collection(db, "users-$"), {
                 name: newUser,
                 total: 0,
                 totalPaid: 0
@@ -45,7 +45,7 @@ function Main() {
         const fetchData = async () => {
             dispatch(show());
             var apiUsers = [];
-            await getDocuments('users')
+            await getDocuments('users-$')
                 .then((d) => {
                     d.docs.forEach(element => {
                         var index = [];
@@ -53,7 +53,7 @@ function Main() {
                         index['name'] = element.data().name;
                         index['total'] = element.data().total;
                         index['totalPaid'] = element.data().totalPaid;
-                        index['userRef'] = doc(db, 'users', element.id);
+                        index['userRef'] = doc(db, 'users-$', element.id);
                         apiUsers.push(index);
                     });
                     setUsers(apiUsers);
@@ -61,7 +61,7 @@ function Main() {
                 .catch((e) => toast.error(`Error fetch users: ${e}`))
                 .finally(() => {
                     var debitsUsers = [];
-                    getDocuments('debits')
+                    getDocuments('debits-$')
                         .then((d) => {
                             d.docs.forEach(element => {
                                 var index = [];
@@ -77,7 +77,7 @@ function Main() {
                         .catch((e) => toast.error(`Error fetch debits: ${e}`))
                         .finally(() => {
                             var paidsUsers = [];
-                            getDocuments('paids')
+                            getDocuments('paids-$')
                                 .then((d) => {
                                     d.docs.forEach(element => {
                                         var index = [];
@@ -142,4 +142,4 @@ function Main() {
     );
 }
 
-export default Main;
+export default MainDol;

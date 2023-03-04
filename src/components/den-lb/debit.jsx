@@ -1,10 +1,10 @@
 import { deleteDoc, doc } from "firebase/firestore";
-import { calculateUserTotal, db, formatPrice } from "../../firebase";
+import { calculateUserTotalLb, db, formatPrice } from "../../firebase";
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { show } from '../../reducers/loaderState';
-function Paid(props) {
-    const paid = props.paid;
+function Debit(props) {
+    const debit = props.debit;
     const dispatch = useDispatch();
     const toDate = timesTamp => {
         var date = new Date(timesTamp);
@@ -13,23 +13,24 @@ function Paid(props) {
     const deleteMe = () => {
         if (window.confirm('sure?')) {
             dispatch(show());
-            const ref = doc(db, 'paids', paid.id);
+            const ref = doc(db, 'debits-lb', debit.id);
             deleteDoc(ref)
-                .then(() => toast.success(`${formatPrice(paid.paid)} deleted!`, { autoClose: 200 }))
+                .then(() => toast.success(`${formatPrice(debit.debit)} deleted!`, { autoClose: 200 }))
                 .catch((e) => toast.error(`Error delete document: ${e}`))
-                .finally(calculateUserTotal(paid.user, props.update));
+                .finally(calculateUserTotalLb(debit.user, props.update));
         }
     }
     return (
         <>
-            <li className="list-group-item border-success d-flex justify-content-between align-items-start" style={{ cursor: 'pointer' }} onClick={deleteMe}>
+            <li className="list-group-item border-danger d-flex justify-content-between align-items-start" style={{ cursor: 'pointer' }} onClick={deleteMe}>
                 <div className="ms-2 me-auto">
-                    <div className="fw-bold">{toDate(paid.createdAt)}</div>
+                    <div className="fw-bold">{toDate(debit.createdAt)}</div>
+                    {debit.comment}
                 </div>
-                <span className="badge bg-success fs-6 rounded-pill">
-                    {formatPrice(paid.paid)}
+                <span className="badge bg-danger fs-6 rounded-pill">
+                    {formatPrice(debit.debit)}
                 </span>
             </li>
         </>);
 }
-export default Paid;
+export default Debit;
