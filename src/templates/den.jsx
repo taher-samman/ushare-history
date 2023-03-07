@@ -13,11 +13,10 @@ function Den() {
         <>
             <Header />
             <Container>
-                <Form.Group className="mb-3">
-                    <Form.Checkfirebas
+                <Form.Group className="mt-3">
+                    <Form.Check
                         type="switch"
                         id="currency"
-                        label={currency}
                         onChange={() => dispatch(currencyChange())}
                     />
                 </Form.Group>
