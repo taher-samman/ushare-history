@@ -74,7 +74,7 @@ export const encryptData = (code) => {
 };
 export const formatPrice = (price, currentcy = 'LBP') => {
     if (currentcy === 'LBP') {
-        price = Object.assign([], price.toString());
+        price = Object.assign([], price.toFixed(0).toString());
         var formatedPrice = [];
         var cpt = 0;
         for (let i = (price.length - 1); i >= 0; i--) {
@@ -86,7 +86,7 @@ export const formatPrice = (price, currentcy = 'LBP') => {
         }
         return `${currentcy} ${formatedPrice.join('')}`;
     } else {
-        return `${price} ${currentcy}`;
+        return `${price.toFixed(2)} ${currentcy}`;
     }
 
 }
