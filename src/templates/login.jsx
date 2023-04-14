@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, logInWithEmailAndPassword } from '../firebase';
@@ -36,6 +36,7 @@ function Login() {
   if (user === null) {
     return (
       <div className="container h-100">
+        <NavLink to='/help' className="btn btn-success">Help Page</NavLink>
         <div className="row h-100">
           <div className="col-12 m-auto">
             <form className="d-flex flex-column" onSubmit={e => { login(e) }}>

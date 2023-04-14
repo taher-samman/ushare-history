@@ -12,6 +12,7 @@ import OutCome from "./templates/outcome";
 import Den from "./templates/den";
 import Prices from "./templates/prices";
 import { UAParser } from "ua-parser-js";
+import Help from "./templates/help";
 function App() {
   var userAgent = navigator.userAgent;
   const parser = UAParser(userAgent);
@@ -34,6 +35,7 @@ function App() {
           <Route path="/login" element={<PrivateLoginRoute />}>
             <Route index element={<Login />} />
           </Route>
+          <Route path="/help" element={<Help />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
