@@ -13,15 +13,13 @@ import Den from "./templates/den";
 import Prices from "./templates/prices";
 import { UAParser } from "ua-parser-js";
 import Help from "./templates/help";
+import { useState } from "react";
 function App() {
   var userAgent = navigator.userAgent;
   const parser = UAParser(userAgent);
-
+  const [showagent, setShowagent] = useState(false);
   return (
     <>
-      <div className="container">
-        <p>{JSON.stringify(parser)}</p>
-      </div>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PrivateHomeRoute />}>
@@ -51,6 +49,14 @@ function App() {
         pauseOnHover
         theme="colored"
       />
+      <div className="container">
+      {showagent &&
+          <p onClick={() => setShowagent(false)}>{JSON.stringify(parser)}</p>
+      }
+      {!showagent &&
+        <button className="btn btn-danger" onClick={() => setShowagent(true)}>Agent</button>
+      }
+      </div>
       <Loader />
     </>
   );

@@ -17,7 +17,7 @@ function Help() {
       <Container>
         <input type="text" className="form-control mb-5 mt-5" placeholder="enter deeplink" onChange={(e) => setDeeplink(e.target.value)} />
         <button className="btn btn-danger mb-5" onClick={goBenefit}>Go Benefit</button> <br />
-        <a href={deeplink} target="_blank">Go Benefit</a>
+        {/* <a href={deeplink} target="_blank">Go Benefit</a> */}
         <p className="mt-5">{deeplink !== '' ? deeplink : 'No Deep Link'}</p>
       </Container>
     </>
